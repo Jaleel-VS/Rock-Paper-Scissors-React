@@ -1,0 +1,47 @@
+.background-container {
+    position: relative;
+    background-image: url('./bg.png'); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Adjust height as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Grey overlay with 50% opacity */
+}
+
+.content {
+    position: relative;
+    z-index: 1; /* Ensures content is above the overlay */
+    color: white; /* Adjust text color for contrast */
+    /* Add more styling for your content here */
+    font-family: 'Montserrat', sans-serif;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn {
+    background-color: #BF40BF;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+

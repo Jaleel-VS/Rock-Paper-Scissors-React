@@ -1,0 +1,102 @@
+.game-setup-header {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.game-setup {
+    color: white;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 100vh; /* Adjust height as needed */
+    display: flex;
+    /* gap: 20px; */
+    justify-content: center;
+    padding-top: 4rem;
+    /* align-items: center;     */
+}
+
+.game-setup-form {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.name-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.name-input label,
+.name-input input {
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.name-input label {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.name-input input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    /* width: 100%; */
+    font-size: 1rem;
+    text-align: center;
+}
+
+.name-input input:focus {
+    outline: none;
+    border-color: #BF40BF;
+}
+
+.rounds-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.rounds-selection {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+
+}
+
+.rounds-card {
+    width: 48px;
+    height: 48px;
+    line-height: 48px; /* Vertically center the text */
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 24px; /* Circular cards */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rounds-card.selected {
+    border-color: #BF40BF;
+    color: #BF40BF;
+}
+
+.btn {
+    padding-top: 20px;
+    background-color: #BF40BF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #9F309F;
+}
