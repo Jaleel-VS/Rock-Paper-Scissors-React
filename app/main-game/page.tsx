@@ -19,15 +19,28 @@ const GameScreen = () => {
     const [currentRound, setCurrentRound] = useState<number>(1);
     const [result, setResult] = useState<ResultState>({ player: [], computer: [] });
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
-    const { playerName, rounds } = useGameStore();
+    const { playerName, rounds, setWinnerName, setFinalResult } = useGameStore();
     const winningEmoji: string = '🟢'
     const losingEmoji: string = '🔴'
     const tieEmoji: string = '🟡'
     const winsNeeded = Math.ceil(rounds / 2);
     const router = useRouter();
     const [highlightChoice, setHighlightChoice] = useState<string>(''); // New state for final choice highlighting
+    const emojis = {
+        player: { player: winningEmoji, computer: losingEmoji },
+        computer: { player: losingEmoji, computer: winningEmoji },
+        tie: { player: tieEmoji, computer: tieEmoji }
+    };
+
 
     const [isChoosing, setIsChoosing] = useState<boolean>(false); // New state for animation
+
+
+    const handleSubmit = () => {
+        if (!playerChoice || isChoosing) return; // Prevent submit if no player choice or during animation
+
+        makeComputerChoice(); // Initiates the computer's choice process
+    };
 
     const makeComputerChoice = () => {
         setIsChoosing(true);
@@ -51,68 +64,48 @@ const GameScreen = () => {
 
     const finalizeRound = (finalComputerChoice: string) => {
         setHighlightChoice('');
-        // reset player choice
         setPlayerChoice('');
-        // Logic to decide the outcome of the round
+        
+        let roundResult: ResultKeys;
         if (playerChoice === finalComputerChoice) {
-            updateResult('tie');
+            roundResult = 'tie';
         } else if (
             (playerChoice === 'Rock' && finalComputerChoice === 'Scissors') ||
             (playerChoice === 'Paper' && finalComputerChoice === 'Rock') ||
             (playerChoice === 'Scissors' && finalComputerChoice === 'Paper')
         ) {
-            updateResult('player');
+            roundResult = 'player';
         } else {
-            updateResult('computer');
+            roundResult = 'computer';
         }
-
-        setCurrentRound(prevRound => prevRound + 1);
-        checkIfGameOver();
-    };
-
-    const handleSubmit = () => {
-        if (!playerChoice || isChoosing) return; // Prevent submit if no player choice or during animation
-
-        makeComputerChoice(); // Initiates the computer's choice process
-    };
-
-    const updateResult = (winner: ResultKeys) => {
-        const emojis = {
-            player: { player: winningEmoji, computer: losingEmoji },
-            computer: { player: losingEmoji, computer: winningEmoji },
-            tie: { player: tieEmoji, computer: tieEmoji }
-        };
+        
+        setResult(prevResult => ({
+            player: [...prevResult.player, emojis[roundResult].player],
+            computer: [...prevResult.computer, emojis[roundResult].computer]
+        }));
     
-        setResult(prevResult => {
-            return {
-                player: [...prevResult.player, emojis[winner].player],
-                computer: [...prevResult.computer, emojis[winner].computer]
-            };
-        });
+        setCurrentRound(prevRound => prevRound + 1);
     };
-
-    const checkIfGameOver = (): void => {
+    
+    // useEffect to check if the game is over
+    useEffect(() => {
         const playerCount = result.player.filter(emoji => emoji === winningEmoji).length;
         const computerCount = result.computer.filter(emoji => emoji === winningEmoji).length;
-
+    
         if (playerCount === winsNeeded || computerCount === winsNeeded) {
             setIsGameOver(true);
-
-            const winner = determineWinner();
-
-            router.push(`/game-over/${winner}`);
-
-
+            const winner = playerCount === winsNeeded ? 'player' : 'computer';
+            setWinnerName(winner === 'player' ? playerName : 'Computer');
+            setFinalResult(`${result.player.join('')}-${result.computer.join('')}`);
+            router.push(`/game-over/`);
         }
+    }, [result]); // This effect will run every time the result changes
 
-        console.log(result.player.join(''));
-        console.log(result.computer.join(''));
-    }
-
-    const determineWinner = (): string | null => {
-        const playerCount = result.player.filter(emoji => emoji === winningEmoji).length;
-        const computerCount = result.computer.filter(emoji => emoji === winningEmoji).length;
-
+    
+    const determineWinner = (updatedResult: ResultState) => {
+        const playerCount = updatedResult.player.filter(emoji => emoji === winningEmoji).length;
+        const computerCount = updatedResult.computer.filter(emoji => emoji === winningEmoji).length;
+    
         if (playerCount === winsNeeded) {
             return 'player';
         } else if (computerCount === winsNeeded) {
@@ -121,7 +114,6 @@ const GameScreen = () => {
             return null;
         }
     }
-
 
 
 
